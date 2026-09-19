@@ -8,17 +8,19 @@
 ```
 ADC_Analysis/
 ├── ADCdb_Analysis.ipynb   # 分析 Notebook（数据转 pandas → 清洗 → 统计 → 出图）
-├── analysis.py            # 等同流程的独立脚本，可直接运行
-├── cleaned_adcdb.csv      # 清洗后数据（由脚本生成）
-├── antibody_conjugate.png # 可视化结果（Top 8 横向条形图，数值标注）
-├── requirements.txt       # 依赖清单
-└── README.md              # 项目说明
+├── analysis.py            # 数据处理的python脚本
+├── cleaned_adcdb.csv      # 清洗后数据（由analysis.py脚本生成）
+├── antibody_conjugate.png # 可视化结果（条形图）
+├── requirements.yml       # 所需依赖
+└── README.md              
 ```
 
 ## 快速开始
 
 ```bash
-pip install -r requirements.txt
+#创建conda环境
+conda env create -f environment.yml
+conda activate ADC_env
 
 # 方式一：运行脚本
 python analysis.py
@@ -27,19 +29,19 @@ python analysis.py
 jupyter notebook ADCdb_Analysis.ipynb
 ```
 
-运行后自动生成清洗数据 `cleaned_adcdb.csv` 与可视化图 `antibody_conjugate.png`。
+运行结果为清洗数据集 `cleaned_adcdb.csv` 和可视化图 `antibody_conjugate.png`。
 
-## 分析内容
+## 数据清洗内容
 
 1. 用 `pandas.read_excel` 把 Excel 读成 DataFrame；
 2. 缺失值统计、ADC ID 类型规整、去除重复记录；
 3. 抗体、偶联方式、连接子、载荷的频数统计；
-4. 四类字段各取 **Top 8**，绘制**横向条形图**并标注具体数值，长名称自动换行，保存为 PNG。
+4. 四类字段各取排名**Top 8**数据进行展示，绘制**横向条形图**并标注具体数值，长名称自动换行，保存为 PNG。
 
 ## 主要结论
 
 - 原始数据 **1431 行、13 列**，清洗后无重复；
 - 最常用抗体：**Trastuzumab**（73 条）；
-- 主要偶联方式：随机还原链间二硫键偶联（845 条）；
+- 主要偶联方式：**Random conjugation through reduced inter-chain cysteines**（845 条）；
 - 最常见连接子：**Mc-Val-Cit-PABC**（236 条）；
 - 最常见载荷：**Monomethyl auristatin E**（259 条）。
