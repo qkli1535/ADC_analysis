@@ -24,20 +24,19 @@ df.to_csv("cleaned_adcdb.csv", index=False)            # 保存清洗结果
 
 
 def top_counts(series, n=8):
-    """取频数最高的前 n 项。"""
     return series.value_counts().head(n)
 
 
-def wrap(label, width=30, maxlines=2):
-    """长名称最多拆成两行，超出加省略号。"""
-    lines = textwrap.wrap(label, width=width)
+def label(name, width=30, maxlines=2, keep=24):        #长名称最多拆两行；太长改『头…尾』，避免不同类目标签重复。
+    name = str(name)
+    lines = textwrap.wrap(name, width=width)
     if len(lines) <= maxlines:
         return "\n".join(lines)
-    return "\n".join(lines[:maxlines]) + "…"
+    return name[:keep] + "…" + name[-keep:]
 
 
-fig, axes = plt.subplots(2, 2, figsize=(15, 12))
-fig.suptitle("ADCdb 常见字段 Top 8", fontsize=16)
+fig, axes = plt.subplots(2, 2, figsize=(22, 15))
+fig.suptitle("ADCdb-Top 8", fontsize=16)
 parts = [
     (axes[0, 0], df["Antibody Name"], "Top 8 抗体"),
     (axes[0, 1], df["Conjugate Type"], "Top 8 偶联方式"),
@@ -46,8 +45,8 @@ parts = [
 ]
 for ax, col, title in parts:
     counts = top_counts(col)
-    bars = ax.barh(counts.index.map(wrap), counts.values)
-    ax.bar_label(bars, fmt="%d", padding=3)
+    bars = ax.barh(counts.index.map(label), counts.values)
+    ax.bar_label(bars, fmt="%d", padding=5)
     ax.set_title(title, fontsize=12)
     ax.invert_yaxis()
     ax.set_xlabel("记录数")
